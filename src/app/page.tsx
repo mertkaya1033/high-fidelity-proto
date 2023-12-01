@@ -5,9 +5,8 @@ import SkillList from "./components/skill-list";
 import CircularProgress from "./components/circular-progress";
 import { data, type Data, type Month, years, months } from "./_data";
 import DataPage from "./components/data-page";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 const maxTotalSavings = Object.values(data.maxSavings).reduce(
   (val, total) => val + total,
@@ -26,6 +25,10 @@ function twoDecimal(num: number) {
 }
 
 export default function HomePage() {
+  const router = useRouter();
+  if (!localStorage.getItem("isLoggedIn")) {
+    router.push("/login");
+  }
   const searchParams = useSearchParams();
 
   const date = new Date();
@@ -76,8 +79,15 @@ export default function HomePage() {
           No data exists for {month} {year}.
         </p>
       )}
-      <Button className="w-full" variant={"destructive"} asChild>
-        <Link href={"/login"}>Logout</Link>
+      <Button
+        className="w-full"
+        variant={"destructive"}
+        onClick={() => {
+          localStorage.removeItem("isLoggedIn");
+          router.push("/login");
+        }}
+      >
+        Logout
       </Button>
     </DataPage>
   );

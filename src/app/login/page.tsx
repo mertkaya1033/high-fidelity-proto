@@ -3,13 +3,13 @@
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import { useForm } from "react-hook-form";
 // import { z } from "zod";
-import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 // function findUser(username: string, password: string) {
 //   const authList = [
@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // }
 
 export default function OtherPage() {
+  const router = useRouter();
   return (
     <div className="flex h-screen w-full items-center justify-center">
       <Card>
@@ -40,8 +41,14 @@ export default function OtherPage() {
             type="password"
             placeholder="Enter your password"
           />
-          <Button className="mt-3 self-center" asChild>
-            <Link href="/">Login</Link>
+          <Button
+            className="mt-3 self-center"
+            onClick={() => {
+              localStorage.setItem("isLoggedIn", "yessir");
+              router.push("/");
+            }}
+          >
+            Login
           </Button>
         </CardContent>
       </Card>
