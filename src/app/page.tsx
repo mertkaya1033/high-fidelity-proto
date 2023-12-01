@@ -1,37 +1,72 @@
+"use client";
+import React from "react";
+import SkillList from "./components/skill-list";
+
+import CircularProgress from "./components/circular-progress";
+import { data, type Data, type Month, years, months } from "./_data";
+import DataPage from "./components/data-page";
+import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+const maxTotalSavings = Object.values(data.maxSavings).reduce(
+  (val, total) => val + total,
+  0,
+);
+
+function getMonthSavings(data: Data, month: Month, year: number) {
+  return Object.values(data.totalSavings[year]![month]).reduce(
+    (val, total) => val + total,
+    0,
+  );
+}
+
+function twoDecimal(num: number) {
+  return (Math.round(num * 100) / 100).toFixed(2);
+}
+
 export default function HomePage() {
+  const searchParams = useSearchParams();
+
+  const date = new Date();
+
+  const year = (() => {
+    const year = searchParams.get("year") ?? date.getFullYear() + "";
+
+    return years.includes(parseInt(year)) ? year : years[years.length - 1] + "";
+  })();
+
+  const month = searchParams.get("month") ?? months[date.getMonth()]!;
+
+  const totalSavings = getMonthSavings(data, month as Month, parseInt(year));
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
-        </div>
+    <DataPage
+      title="Your Statistics"
+      month={month}
+      months={months}
+      years={years}
+      year={year}
+    >
+      <div className="pt-10">
+        <CircularProgress
+          r={70}
+          cx={80}
+          cy={80}
+          percentage={Math.floor(totalSavings / maxTotalSavings) * 100}
+        />
       </div>
-    </main>
+      <p className="pb-12 text-center leading-7 [&:not(:first-child)]:mt-6">
+        You have saved{" "}
+        <span className="text-primary">${twoDecimal(totalSavings)}</span> out of{" "}
+        <span className="text-primary">${twoDecimal(maxTotalSavings)}</span> in{" "}
+        {month} of {year}.
+      </p>
+
+      <SkillList />
+      <Button className="w-full" variant={"destructive"} asChild>
+        <Link href={"/login"}>Logout</Link>
+      </Button>
+    </DataPage>
   );
 }
