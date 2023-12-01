@@ -11,6 +11,11 @@ import {
 } from "@/components/ui/select";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { type Month, data } from "../_data";
+
+function isDisabled(month: Month, year: number) {
+  return !data.totalSavings[year]?.[month];
+}
 
 export default function DataPage(
   props: React.PropsWithChildren<{
@@ -35,6 +40,14 @@ export default function DataPage(
     },
     [searchParams],
   );
+
+  const date = new Date();
+  const selectedMonth = (searchParams.get("month") ??
+    months[date.getMonth()]!) as Month;
+  const selectedYear = parseInt(
+    searchParams.get("year") ?? date.getFullYear() + "",
+  );
+
   return (
     <div className="mx-auto flex h-screen w-full max-w-xl flex-col items-center gap-4 px-4 pt-10">
       <h1 className="scroll-m-20 py-4 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -60,7 +73,15 @@ export default function DataPage(
               <SelectGroup>
                 {months.map((month) => {
                   return (
-                    <SelectItem key={month} value={month}>
+                    <SelectItem
+                      key={month}
+                      value={month}
+                      className={
+                        isDisabled(month as Month, selectedYear)
+                          ? "opacity-50"
+                          : ""
+                      }
+                    >
                       {month}
                     </SelectItem>
                   );
@@ -82,7 +103,13 @@ export default function DataPage(
               <SelectGroup>
                 {years.map((year) => {
                   return (
-                    <SelectItem key={year} value={year + ""}>
+                    <SelectItem
+                      key={year}
+                      value={year + ""}
+                      className={
+                        isDisabled(selectedMonth, year) ? "opacity-50" : ""
+                      }
+                    >
                       {year}
                     </SelectItem>
                   );

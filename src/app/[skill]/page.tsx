@@ -68,12 +68,13 @@ export default function Page({
         ? year
         : years[years.length - 1] + "";
     })(),
-  ) as keyof typeof data.totalSavings;
+  );
 
   const month = (searchParams.get("month") ??
     months[date.getMonth()]!) as Month;
 
-  const savings = data.totalSavings[year][month][skill];
+  const dataExists = !!data.totalSavings[year]?.[month];
+  const savings = data.totalSavings[year]?.[month]?.[skill] ?? 0;
   const info = skills[skill];
 
   return (
@@ -89,24 +90,26 @@ export default function Page({
           r={70}
           cx={80}
           cy={80}
-          percentage={
-            Math.floor(
-              data.totalSavings[year][month][skill] / data.maxSavings[skill],
-            ) * 100
-          }
+          percentage={Math.floor(savings / data.maxSavings[skill]) * 100}
         />
       </div>
-      <p className="text-center leading-7 [&:not(:first-child)]:mt-6">
-        You have saved{" "}
-        <span className="text-primary">${twoDecimal(savings)}</span> out of{" "}
-        <span className="text-primary">
-          ${twoDecimal(data.maxSavings[skill])}
-        </span>{" "}
-        in {month} of {year}.
-      </p>
+      {dataExists ? (
+        <p className="text-center leading-7 [&:not(:first-child)]:mt-6">
+          You have saved{" "}
+          <span className="text-primary">${twoDecimal(savings)}</span> out of{" "}
+          <span className="text-primary">
+            ${twoDecimal(data.maxSavings[skill])}
+          </span>{" "}
+          in {month} of {year}.
+        </p>
+      ) : (
+        <p className="text-center leading-7 [&:not(:first-child)]:mt-6">
+          No data exists for {month} {year}.
+        </p>
+      )}
       <ul className="my-6 ml-6 list-disc [&>li]:mt-2">
-        {info.bulletPoints.map((point) => {
-          return <li>{point}</li>;
+        {info.bulletPoints.map((point, i) => {
+          return <li key={i}>{point}</li>;
         })}
       </ul>
       <Button className="w-full" variant={"secondary"} asChild>

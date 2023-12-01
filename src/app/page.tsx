@@ -15,7 +15,7 @@ const maxTotalSavings = Object.values(data.maxSavings).reduce(
 );
 
 function getMonthSavings(data: Data, month: Month, year: number) {
-  return Object.values(data.totalSavings[year]![month]).reduce(
+  return Object.values(data.totalSavings[year]![month]!).reduce(
     (val, total) => val + total,
     0,
   );
@@ -38,7 +38,11 @@ export default function HomePage() {
 
   const month = searchParams.get("month") ?? months[date.getMonth()]!;
 
-  const totalSavings = getMonthSavings(data, month as Month, parseInt(year));
+  const dataExists = !!data.totalSavings[parseInt(year)]?.[month as Month];
+
+  const totalSavings = dataExists
+    ? getMonthSavings(data, month as Month, parseInt(year))
+    : 0;
 
   return (
     <DataPage
@@ -56,14 +60,22 @@ export default function HomePage() {
           percentage={Math.floor(totalSavings / maxTotalSavings) * 100}
         />
       </div>
-      <p className="pb-12 text-center leading-7 [&:not(:first-child)]:mt-6">
-        You have saved{" "}
-        <span className="text-primary">${twoDecimal(totalSavings)}</span> out of{" "}
-        <span className="text-primary">${twoDecimal(maxTotalSavings)}</span> in{" "}
-        {month} of {year}.
-      </p>
-
-      <SkillList />
+      {dataExists ? (
+        <>
+          <p className="pb-12 text-center leading-7 [&:not(:first-child)]:mt-6">
+            You have saved{" "}
+            <span className="text-primary">${twoDecimal(totalSavings)}</span>{" "}
+            out of{" "}
+            <span className="text-primary">${twoDecimal(maxTotalSavings)}</span>{" "}
+            in {month} of {year}.
+          </p>
+          <SkillList />
+        </>
+      ) : (
+        <p className="pb-12 text-center leading-7 [&:not(:first-child)]:mt-6">
+          No data exists for {month} {year}.
+        </p>
+      )}
       <Button className="w-full" variant={"destructive"} asChild>
         <Link href={"/login"}>Logout</Link>
       </Button>

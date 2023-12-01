@@ -26,7 +26,7 @@ type Savings = {
 
 export type Data = {
   maxSavings: Savings;
-  totalSavings: Record<number, Record<Month, Savings>>;
+  totalSavings: Record<number, Partial<Record<Month, Savings>>>;
 };
 
 export const data = {
@@ -39,62 +39,6 @@ export const data = {
   },
   totalSavings: {
     2022: {
-      January: {
-        speed: 10,
-        stopping: 30,
-        lanes: 50,
-        turning: 20,
-        "phone-usage": 100,
-      },
-      February: {
-        speed: 10,
-        stopping: 30,
-        lanes: 50,
-        turning: 20,
-        "phone-usage": 100,
-      },
-      March: {
-        speed: 10,
-        stopping: 30,
-        lanes: 50,
-        turning: 20,
-        "phone-usage": 100,
-      },
-      April: {
-        speed: 10,
-        stopping: 30,
-        lanes: 50,
-        turning: 20,
-        "phone-usage": 100,
-      },
-      May: {
-        speed: 10,
-        stopping: 30,
-        lanes: 50,
-        turning: 20,
-        "phone-usage": 100,
-      },
-      June: {
-        speed: 10,
-        stopping: 30,
-        lanes: 50,
-        turning: 20,
-        "phone-usage": 100,
-      },
-      July: {
-        speed: 10,
-        stopping: 30,
-        lanes: 50,
-        turning: 20,
-        "phone-usage": 100,
-      },
-      August: {
-        speed: 10,
-        stopping: 30,
-        lanes: 50,
-        turning: 20,
-        "phone-usage": 100,
-      },
       September: {
         speed: 10,
         stopping: 30,
@@ -181,13 +125,6 @@ export const data = {
         turning: 20,
         "phone-usage": 100,
       },
-      September: {
-        speed: 10,
-        stopping: 30,
-        lanes: 50,
-        turning: 20,
-        "phone-usage": 100,
-      },
       October: {
         speed: 10,
         stopping: 30,
@@ -211,4 +148,4 @@ export const data = {
       },
     },
   },
-} satisfies Data;
+} as Data;
