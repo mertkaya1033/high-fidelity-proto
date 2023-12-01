@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import SkillList from "./components/skill-list";
 
 import CircularProgress from "./components/circular-progress";
@@ -26,9 +26,12 @@ function twoDecimal(num: number) {
 
 export default function HomePage() {
   const router = useRouter();
-  if (!localStorage.getItem("isLoggedIn")) {
-    router.push("/login");
-  }
+  useEffect(() => {
+    if (!localStorage.getItem("isLoggedIn")) {
+      router.push("/login");
+    }
+  }, [router]);
+
   const searchParams = useSearchParams();
 
   const date = new Date();
