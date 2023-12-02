@@ -65,8 +65,8 @@ export default function SkillList({
         const saving = savings[skillStr as keyof typeof skills];
         const maxSaving = maxSavings[skillStr as keyof typeof skills];
         return (
-          <div className="flex w-full items-center justify-between">
-            <Button key={i} variant={"outline"} asChild>
+          <div className="flex w-full items-center justify-between" key={i}>
+            <Button variant={"outline"} asChild>
               <Link href={"/" + skillStr + "?" + searchParams.toString()}>
                 {skill.text}
               </Link>
