@@ -45,7 +45,15 @@ const skills = {
 } as const;
 
 function twoDecimal(num: number) {
-  return (Math.round(num * 100) / 100).toFixed(2);
+  return Math.round(num * 100) / 100;
+}
+
+function twoDecimalStr(num: number) {
+  return twoDecimal(num).toFixed(2);
+}
+
+function over75Percent(num: number) {
+  return twoDecimal(num) >= 0.75;
 }
 
 const hrefs = Object.keys(skills);
@@ -74,9 +82,18 @@ export default function Page({
     months[date.getMonth()]!) as Month;
 
   const dataExists = !!data.totalSavings[year]?.[month];
-  const savings = data.totalSavings[year]?.[month]?.[skill] ?? 0;
+  const potentialSavings = data.totalSavings[year]?.[month]?.[skill] ?? 0;
   const info = skills[skill];
 
+  const isOverThreshold = over75Percent(
+    potentialSavings / data.maxSavings[skill],
+  );
+  const savings = isOverThreshold ? potentialSavings : 0;
+  const savingsColor = isOverThreshold
+    ? "hsl(142.1 76.2% 36.3%"
+    : "hsl(346.8 77.2% 49.8%)";
+
+  // console.log({ dataExists, savings, max: data.maxSavings[skill] });
   return (
     <DataPage
       title={skills[skill].text}
@@ -90,17 +107,21 @@ export default function Page({
           r={70}
           cx={80}
           cy={80}
-          percentage={Math.floor(savings / data.maxSavings[skill]) * 100}
+          percentage={
+            twoDecimal(potentialSavings / data.maxSavings[skill]) * 100
+          }
+          color={savingsColor}
         />
       </div>
       {dataExists ? (
         <p className="text-center leading-7 [&:not(:first-child)]:mt-6">
           You have saved{" "}
-          <span className="text-primary">${twoDecimal(savings)}</span> out of{" "}
+          <span style={{ color: savingsColor }}>${twoDecimalStr(savings)}</span>{" "}
+          out of{" "}
           <span className="text-primary">
-            ${twoDecimal(data.maxSavings[skill])}
+            ${twoDecimalStr(data.maxSavings[skill])}
           </span>{" "}
-          in {month} of {year}.
+          due to {skill} in {month} {year}.
         </p>
       ) : (
         <p className="text-center leading-7 [&:not(:first-child)]:mt-6">

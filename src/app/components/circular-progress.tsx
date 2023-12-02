@@ -6,10 +6,11 @@ export default function CircularProgress(
     r: number;
     cx: number;
     cy: number;
+    color: string;
   }>,
 ) {
   // https://nikitahl.com/svg-circle-progress
-  const { r, cx, cy, percentage } = props;
+  const { r, cx, cy, percentage, color } = props;
   const strokeDashArray = 2 * Math.PI * r;
   const strokeDashOffset = (strokeDashArray * (100.0 - percentage)) / 100.0;
 
@@ -29,16 +30,13 @@ export default function CircularProgress(
         cx={cx}
         cy={cy}
         fill="transparent"
-        stroke={"hsl(var(--primary))"}
-        strokeLinecap="round"
+        stroke={color}
         strokeWidth="12px"
         strokeDasharray={strokeDashArray + "px"}
         strokeDashoffset={strokeDashOffset + "px"}
         style={{
           transform: "rotate(-90deg)",
           transformOrigin: "50% 50%",
-          // animationName: "progress",
-          // animationDuration: "1s",
         }}
       ></circle>
       <text
@@ -46,7 +44,7 @@ export default function CircularProgress(
         y="50%"
         dominantBaseline="middle"
         textAnchor="middle"
-        fill="hsl(var(--primary))"
+        fill={color}
         fontSize="40px"
         fontWeight="bold"
       >
