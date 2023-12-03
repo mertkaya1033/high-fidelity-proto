@@ -45,7 +45,6 @@ export default function OtherPage() {
     }
     setError("username", { message: "" });
     setError("password", { message: "Incorrect username or password" });
-    console.log({ data });
   };
 
   return (
@@ -71,7 +70,7 @@ export default function OtherPage() {
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your email" {...field} />
+                      <Input placeholder="Enter your username" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
