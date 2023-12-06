@@ -93,7 +93,12 @@ export default function Page({
     ? "hsl(142.1 76.2% 36.3%"
     : "hsl(346.8 77.2% 49.8%)";
 
-  // console.log({ dataExists, savings, max: data.maxSavings[skill] });
+  // console.log({
+  //   dataExists,
+  //   savings,
+  //   max: data.maxSavings[skill],
+  //   potentialSavings,
+  // });
   return (
     <DataPage
       title={skills[skill].text}

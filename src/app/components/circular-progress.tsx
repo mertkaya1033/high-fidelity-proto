@@ -13,7 +13,6 @@ export default function CircularProgress(
   const { r, cx, cy, percentage, color } = props;
   const strokeDashArray = 2 * Math.PI * r;
   const strokeDashOffset = (strokeDashArray * (100.0 - percentage)) / 100.0;
-
   return (
     <svg width="160" height="160" viewBox="0 0 160 160">
       <circle
@@ -48,7 +47,7 @@ export default function CircularProgress(
         fontSize="40px"
         fontWeight="bold"
       >
-        {percentage}%
+        {percentage.toFixed(0)}%
       </text>
     </svg>
   );

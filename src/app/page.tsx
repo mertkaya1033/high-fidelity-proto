@@ -84,6 +84,12 @@ export default function HomePage() {
     ? getMonthSavings(data, month as Month, parseInt(year))
     : 0;
 
+  // console.log({
+  //   dataExists,
+  //   totalSavings,
+  //   maxTotalSavings,
+  // });
+
   return (
     <DataPage
       title="Your Statistics"
