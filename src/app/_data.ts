@@ -41,13 +41,6 @@ export const data = {
   maxSavings,
   totalSavings: {
     "2022": {
-      January: {
-        speed: 4,
-        stopping: 23,
-        lanes: 15,
-        turning: 0,
-        "phone-usage": 50,
-      },
       February: {
         speed: 0,
         stopping: 12,
